@@ -1,52 +1,54 @@
 import sqlite3
 
+#connection to db
 def create_table():
-    conn = sqlite3.connect("VJTI_library.db")
-    cur = conn.cursor()
-    cur.execute("CREATE TABLE IF NOT EXISTS library (id INTEGER PRIMARY KEY,title text,author text,year INTEGER,isbn INTEGER)")
+    #connection object
+    conn = sqlite3.connect('books.db')
+    #defining the cursor object
+    curr = conn.cursor()
+    #execute
+    curr.execute("CREATE TABLE IF NOT EXISTS book (id INTEGER PRIMARY KEY,title text,author text,year INTEGER,isbn INTEGER)")
+    #commit
     conn.commit()
+    #close connection
     conn.close()
 
 def insert(title,author,year,isbn):
-    conn = sqlite3.connect("VJTI_library.db")
-    cur = conn.cursor()
-    cur.execute("INSERT INTO library VALUES(NULL,?,?,?,?)",(title,author,year,isbn))
+    conn = sqlite3.connect('books.db')
+    curr = conn.cursor()
+    curr.execute('INSERT INTO book VALUES(NULL,?,?,?,?)',(title,author,year,isbn))
     conn.commit()
     conn.close()
 
-
 def search(title="",author="",year="",isbn=""):
-    conn = sqlite3.connect("VJTI_library.db")
-    cur = conn.cursor()
-    cur.execute("SELECT * FROM library where title=? or author=? or year=? or isbn=?",(title,author,year,isbn))
-    rows = cur.fetchall()
+    conn = sqlite3.connect('books.db')
+    curr = conn.cursor()
+    curr.execute('SELECT * FROM book WHERE title=? or author=? or year=? or isbn=?',(title,author,year,isbn))
+    rows = curr.fetchall()
     conn.close()
     return rows
 
 def delete(id):
-    conn = sqlite3.connect("VJTI_library.db")
+    conn = sqlite3.connect("books.db")
     cur = conn.cursor()
-    cur.execute("DELETE FROM library WHERE id=?",(id,))
+    cur.execute("DELETE FROM book WHERE id=?",(id,))
     conn.commit()
     conn.close()
 
 def update(id,title,author,year,isbn):
-    conn = sqlite3.connect("VJTI_library.db")
+    conn = sqlite3.connect("books.db")
     cur = conn.cursor()
-    cur.execute("UPDATE library SET title=?,author=?,year=?,isbn=? WHERE id=?",(title,author,year,isbn,id))
+    cur.execute("UPDATE book SET title=?,author=?,year=?,isbn=? WHERE id=?",(title,author,year,isbn,id))
     conn.commit()
     conn.close()
 
 def view():
-    conn = sqlite3.connect("VJTI_library.db")
-    cur = conn.cursor()
-    cur.execute("SELECT * FROM library ")
-    rows = cur.fetchall()
+    conn = sqlite3.connect('books.db')
+    curr = conn.cursor()
+    curr.execute('SELECT * FROM book') #returns a tuple
+    rows = curr.fetchall()
     conn.close()
     return rows
 
-
 create_table()
-#delete(1)
-#insert("cal","abc",651,546)
 print(view())
